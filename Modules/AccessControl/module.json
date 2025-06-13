@@ -1,0 +1,8 @@
+{
+    "name": "AccessControl",
+    "alias": "accesscontrol",
+    "active": true,
+    "providers": [
+        "Modules\\AccessControl\\Providers\\AccessControlServiceProvider"
+    ]
+}
