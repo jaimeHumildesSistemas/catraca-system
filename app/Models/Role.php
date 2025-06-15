@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace App\Models;
 
@@ -10,22 +10,30 @@ class Role extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description'];
+    protected $fillable = [
+        'name',
+        'description', // opcional
+    ];
 
-    // Relação muitos-para-muitos com User
-    public function users(): BelongsToMany
+    /**
+     * Relação Role -> Users (um papel para vários usuários)
+     */
+    public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->hasMany(User::class);
     }
-
-    // Relação muitos-para-muitos com Permission
-    public function permissions(): BelongsToMany
-    {
-        return $this->belongsToMany(Permission::class);
-    }
-    public function menus()
+    public function menus(): BelongsToMany
 {
-    return $this->belongsToMany(Menu::class, 'menu_role');
+    return $this->belongsToMany(Menu::class, 'menu_role', 'role_id', 'menu_id');
+    
 }
 
+    /**
+     * Relação Role -> Permissions (muitos para muitos)
+     */
+    public function permissions(): BelongsToMany
+    {
+        return $this->belongsToMany(Permission::class, 'role_permission');
+        // role_permission é a tabela pivô    
+        }
 }

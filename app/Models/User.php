@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
@@ -22,43 +22,53 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected function casts(): array
+    protected $casts = [   // corrigido: 'casts' deve ser propriedade, não método
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    /**
+     * Relação User -> Role (um usuário tem um papel)
+     */
+    public function role(): BelongsTo
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsTo(Role::class);
     }
 
-    // RELAÇÃO COM ROLES
-    public function roles(): BelongsToMany
-    {
-        return $this->belongsToMany(Role::class);
-    }
-
-    // VERIFICA SE O USUÁRIO TEM UM ROLE
+    /**
+     * Verifica se o usuário tem um determinado role
+     * @param string|array $role
+     * @return bool
+     */
     public function hasRole($role): bool
     {
+        if (!$this->role) {
+            return false;  // evita erro caso role seja null
+        }
+
         if (is_string($role)) {
-            return $this->roles->contains('name', $role);
+            return $this->role->name === $role;
         }
 
-        return $this->roles->intersect($role)->isNotEmpty();
-    }
-
-    // VERIFICA SE O USUÁRIO TEM UMA PERMISSÃO VIA ROLE
-    public function hasPermission($permission): bool
-    {
-        foreach ($this->roles as $role) {
-            if ($role->permissions->contains('name', $permission)) {
-                return true;
-            }
+        if (is_array($role)) {
+            return in_array($this->role->name, $role);
         }
+
         return false;
     }
-    public function role()
-{
-    return $this->belongsTo(Role::class);
-}
 
+    /**
+     * Verifica se o usuário tem uma permissão via seu role
+     * @param string $permission
+     * @return bool
+     */
+    public function hasPermission(string $permission): bool
+    {
+        if (!$this->role) {
+            return false;
+        }
+
+        // Assume que Role tem relação 'permissions'
+        return $this->role->permissions->contains('name', $permission);
+    }
 }
