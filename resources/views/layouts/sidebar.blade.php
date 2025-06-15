@@ -1,5 +1,5 @@
 <ul class="sidebar-menu p-4 space-y-2">
-    <pre>{{ print_r($menus->toArray(), true) }}</pre>
+   
 
     @foreach ($menus as $menu)
         <li>
