@@ -1,0 +1,50 @@
+@extends('adminlte::page')
+
+@section('title', 'Movimentações')
+
+@section('content_header')
+    <h1>Movimentações</h1>
+@stop
+
+@section('content')
+    <a href="{{ route('movimentacoes.create') }}" class="btn btn-primary mb-3">Nova Movimentação</a>
+
+    <x-adminlte-alert theme="success" icon="fas fa-check" :dismissable="true" v-if="session('success')">
+        {{ session('success') }}
+    </x-adminlte-alert>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <table class="table table-hover table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Data</th>
+                        <th>Tipo</th>
+                        <th>Valor</th>
+                        <th>Forma de Pagamento</th>
+                        <th>Filial</th>
+                        <th>Usuário</th>
+                        <th>Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($movimentacoes as $mov)
+                        <tr>
+                            <td>{{ \Carbon\Carbon::parse($mov->data_movimentacao)->format('d/m/Y') }}</td>
+                            <td><span class="badge badge-{{ $mov->tipo == 'entrada' ? 'success' : 'danger' }}">{{ ucfirst($mov->tipo) }}</span></td>
+                            <td>R$ {{ number_format($mov->valor, 2, ',', '.') }}</td>
+                            <td>{{ $mov->formaPagamento->descricao ?? '-' }}</td>
+                            <td>{{ $mov->filial->nome ?? '-' }}</td>
+                            <td>{{ $mov->usuario->name ?? '-' }}</td>
+                            <td>{{ $mov->descricao }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card-footer">
+            {{ $movimentacoes->links() }}
+        </div>
+    </div>
+@stop

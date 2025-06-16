@@ -301,6 +301,14 @@ return [
     'menu' => [
         // Navbar items:
         [
+    'text' => 'Fluxo de Caixa',
+    'url'  => 'movimentacoes',
+    'icon' => 'fas fa-cash-register',
+    'can'  => 'ver-caixa', // opcional: usar com gate ou policy
+],
+
+        
+        [
             'type' => 'navbar-search',
             'text' => 'search',
             'topnav_right' => true,

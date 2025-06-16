@@ -2,6 +2,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MovimentacaoController;
+
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -20,4 +22,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
 });
 
+Route::resource('movimentacoes', MovimentacaoController::class)->middleware('auth');
+
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('movimentacoes', MovimentacaoController::class)->only([
+        'index', 'create', 'store'
+    ]);
+});
 require __DIR__.'/auth.php';
