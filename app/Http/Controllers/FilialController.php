@@ -2,63 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Filial;
 use Illuminate\Http\Request;
 
 class FilialController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $filiais = Filial::all();
+        return view('filiais.index', compact('filiais'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('filiais.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate(['nome' => 'required']);
+        Filial::create($request->all());
+        return redirect()->route('filiais.index')->with('success', 'Filial criada com sucesso.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Filial $filial)
     {
-        //
+        return view('filiais.edit', compact('filial'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Filial $filial)
     {
-        //
+        $request->validate(['nome' => 'required']);
+        $filial->update($request->all());
+        return redirect()->route('filiais.index')->with('success', 'Filial atualizada.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Filial $filial)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $filial->delete();
+        return redirect()->route('filiais.index')->with('success', 'Filial deletada.');
     }
 }

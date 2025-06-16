@@ -300,12 +300,28 @@ return [
 
     'menu' => [
         // Navbar items:
-        [
-    'text' => 'Fluxo de Caixa',
-    'url'  => 'movimentacoes',
-    'icon' => 'fas fa-cash-register',
-    'can'  => 'ver-caixa', // opcional: usar com gate ou policy
-],
+      
+[
+        'text' => 'Fluxo de Caixa',
+        'icon' => 'fas fa-cash-register',
+        'submenu' => [
+            [
+                'text' => 'Formas de Pagamento',
+                'url'  => 'formas-pagamento',
+                'icon' => 'far fa-credit-card',
+            ],
+            [
+                'text' => 'Filiais',
+                'url'  => 'filiais',
+                'icon' => 'fas fa-building',
+            ],
+            [
+                'text' => 'Movimentações',
+                'url'  => 'movimentacoes',
+                'icon' => 'fas fa-exchange-alt',
+            ],
+        ],
+    ],
 
         
         [

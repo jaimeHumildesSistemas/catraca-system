@@ -2,63 +2,54 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FormaPagamento;
 use Illuminate\Http\Request;
 
 class FormaPagamentoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $formasPagamento = FormaPagamento::all();
+        return view('formas_pagamento.index', compact('formasPagamento'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('formas_pagamento.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nome' => 'required',
+            'tipo' => 'required'
+        ]);
+
+        FormaPagamento::create($request->all());
+
+        return redirect()->route('formas_pagamento.index')->with('success', 'Forma de pagamento criada com sucesso.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(FormaPagamento $formaPagamento)
     {
-        //
+        return view('formas_pagamento.edit', compact('formaPagamento'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, FormaPagamento $formaPagamento)
     {
-        //
+        $request->validate([
+            'nome' => 'required',
+            'tipo' => 'required'
+        ]);
+
+        $formaPagamento->update($request->all());
+
+        return redirect()->route('formas_pagamento.index')->with('success', 'Forma de pagamento atualizada com sucesso.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(FormaPagamento $formaPagamento)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $formaPagamento->delete();
+        return redirect()->route('formas_pagamento.index')->with('success', 'Forma de pagamento excluída com sucesso.');
     }
 }

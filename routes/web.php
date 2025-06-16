@@ -3,7 +3,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovimentacaoController;
-
+use App\Http\Controllers\FormaPagamentoController;
+use App\Http\Controllers\FilialController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -31,4 +32,10 @@ Route::middleware(['auth'])->group(function () {
         'index', 'create', 'store'
     ]);
 });
+Route::resource('filiais', FilialController::class);
+Route::resource('formas-pagamento', FormaPagamentoController::class);
+
+
+
+
 require __DIR__.'/auth.php';

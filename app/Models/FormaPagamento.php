@@ -1,5 +1,4 @@
-<?php
-
+<?php 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,8 +9,7 @@ class FormaPagamento extends Model
     use HasFactory;
 
     protected $table = 'formas_pagamento';
-
-    protected $fillable = ['descricao'];
+    protected $fillable = ['nome', 'tipo'];
 
     public function movimentacoes()
     {
